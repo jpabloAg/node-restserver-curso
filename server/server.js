@@ -12,6 +12,10 @@ app.use(bodyParser.urlencoded({ extended:false }));
 // parse application/json
 app.use(bodyParser.json());
 
+app.get('/', (req,res) => {
+    res.send('Welcome to my restServer');
+});
+
 app.get('/usuario', (req,res)=>{
     res.json('get Usuario');
 });
