@@ -23,13 +23,15 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
  * cadena de conección remota(se encuentra en el archivo userMongoAtlas-admin.txt):
  * mongodb+srv://jpablo:XyjAzBJwXxZVTPG0@cluster0-hdflp.mongodb.net/cafe 
  */
-
+ /**
+  * process.env.MONGO_URI es una variable que creamos en la clase 113
+  */
 let urlDB;
 
 if( process.env.NODE_ENV === 'dev'){
     urlDB = 'mongodb://localhost:27017/cafe';
 }else{
-    urlDB = 'mongodb+srv://jpablo:XyjAzBJwXxZVTPG0@cluster0-hdflp.mongodb.net/cafe';
+    urlDB = process.env.MONGO_URI;
 }
 
 // nosotros creamos process.env.URLDB, 'URLDB' es una varable de entorno que acabamos de crear
