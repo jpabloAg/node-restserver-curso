@@ -4,6 +4,10 @@ const Usuario = require('../models/usuario.model');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
+app.get('/', (req,res) => {
+    res.send('Welcome to my first restServer');
+})
+
 /**
  * Consultamos todos los registros que esten activos, que su propiedad 'estado' este a true
  * y mostramos todos los campos de estos registros
