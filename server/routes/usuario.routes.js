@@ -4,6 +4,9 @@ const Usuario = require('../models/usuario.model');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
+//requirimos mi middleware
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+
 app.get('/', (req,res) => {
     res.send('Welcome to my first restServer');
 })
@@ -13,8 +16,18 @@ app.get('/', (req,res) => {
  * y mostramos todos los campos de estos registros
  * unicamente mostramos los registros con estado en true, porque los registros cuyo estado sean
  * false estan eliminados logicamente
+ * Usamos el middleware merificaToken
+ * 
+ * Al usar el middleware verificaToken estamos en laobligación de pasarle un header a esta ruta,
+ * para poder acceder a su contenido, en concreto a pasarle un token
  */
-app.get('/usuarios', (req,res)=>{
+app.get('/usuarios', verificaToken, (req,res)=>{
+    // req.usuario es una nueva propiedad que creamos en el middleware, la cual almacena el 
+    // payload que se uso para crear el token (decoded.usuario) en el archivo login.routes.js
+    console.log(`usuario: ${ req.usuario } 
+    nombre: ${ req.usuario.nombre }
+    email: ${ req.usuario.email }`); 
+    
     Usuario.find({ estado:true }).exec((err, usuariosDB) => {
         if(err){
             return res.status(400).json({
@@ -102,7 +115,7 @@ app.get('/usuarios-algunos', (req,res)=>{
     });
 });
 
-app.post('/usuario', (req, res) =>{
+app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) =>{
     let body = req.body;
     let usuario = new Usuario({
         nombre: body.nombre,
@@ -125,7 +138,7 @@ app.post('/usuario', (req, res) =>{
     });
 });
 
-app.put('/usuario/:id', (req ,res) => {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req ,res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre','email','img','role','estado']);
 
@@ -144,7 +157,7 @@ app.put('/usuario/:id', (req ,res) => {
 });
 
 /* Borrado fisico*/
-app.delete('/usuario/:id', (req ,res) => {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role   ], (req ,res) => {
     let id = req.params.id;
     Usuario.findByIdAndRemove(id, ( err, usuarioBorrado) => {
         if(err){
@@ -180,7 +193,7 @@ app.delete('/usuario/:id', (req ,res) => {
 });
 
 /* Borrado logico: cambiamos el valor de la propiedad 'estado' a false*/
-app.put('/usuario-delete/:id', (req, res) => {
+app.put('/usuario-delete/:id', verificaToken,(req, res) => {
     let id = req.params.id;
     let cambiaEstado = {
         estado:false

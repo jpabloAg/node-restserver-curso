@@ -8,8 +8,9 @@ const mongoose = require('mongoose');
 // Middlewares
 app.use(bodyParser.urlencoded({ extended:false }));
 app.use(bodyParser.json());
-// requirimos las rutas
-app.use( require('./routes/usuario.routes') );
+
+// Configuración global de las rutas
+app.use( require('./routes/index') );
 
 // conección a la base de datos
 mongoose.connect(process.env.URLDB, { 

@@ -37,3 +37,17 @@ if( process.env.NODE_ENV === 'dev'){
 // nosotros creamos process.env.URLDB, 'URLDB' es una varable de entorno que acabamos de crear
 //usando process.env
 process.env.URLDB = urlDB;
+
+/**
+ * Vencimiento del token
+ * 60 segundos
+ * 60 minutos
+ * 24 horas
+ * 30 dias 
+ */
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+
+ /**
+  * SEED -- semilla de autenticación
+  */
+ process.env.SEED =  process.env.SEED || 'este-es-el-seed-desarrollo';
