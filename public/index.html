@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id"
+        content="357525682081-73gnjtri0d4akuhbm3rnicbuplhemgjm.apps.googleusercontent.com">
+    <title>Google Sign-In Demo</title>
+    <!-- Cargamos la biblioteca de la plataforma de google -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+
+<body>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <a href="#" onclick="signOut();">Sign out</a>
+    <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    </script>
+    <script>
+        /*
+        Esta funcion nos servira para recoger la informacion de la persona que se registre con el boton de google, pero en concreto la usaremos
+        para capturar un token que genera google, luego enviar ese token haciendo una peticion por post usando xhr a mi ruta /google
+        definida en mi backend server, el token que genera google googleUser.getAuthResponse().id_token
+        es lo que enviaremos a mi backend,el backend tomara ese token para validarlo con la funcion verify que definimos en mi bakcend
+        y si ese token es valido deberiamos de crear el usario
+        La función onSignIn se dispara cunado alguien entra con el boton de google, esta funcion tiene como fin recoger la info del usuario que ingresa, recoger el token
+        que genera google y hacer una peticion por post a mi backend server, especificamente a mi ruta /google
+        */
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();//capturamos la información de la cuenta que ingrese con el boton de goolgle
+            console.log('ID: ' + profile.getId()); // 
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            
+            var id_token = googleUser.getAuthResponse().id_token;//token que da google una vez nos autenticamos, esto se lo enviaremos al backen para validarlo, si es valida creamos el usuario, este token contiene información del usuario que ingreso con el boton de google
+            console.log(id_token);
+            console.log('********');
+            
+            //mandaremos el id_token a mi servidor mediante un post http, usamos la ruta /google que la definimos en mi sarvidor para enviar el token que nos da google 
+            /******** GENERAR LA PETICION POR POST USANDO CODIGO PARA MANDAR UNA PETICION MEDIANTE AJAX
+             JQUERY ($.ajax, $.post, ...), ANGULAR (HttpClient), REACT, ETC NOS SIRVEN TAMBIEN PARA MANDAR PETICIONES MEDIANTE AJAX ************/
+            var xhr = new XMLHttpRequest();//definimos el objeto que nos permitira hacer peticiones
+            xhr.open('POST', '/google');//hacemos una peticion por post a mi ruta /google
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');//configuramos los headers
+            xhr.onload = function () {//funcion que recoge la información, en xhr.responseText, que envia como respuesta mi ruta /google de mi servirdor
+                //xhr.responseText es la respuesta que mandamos desde mi backend server, especificamente desde la peticion con url /google
+                console.log('Conectado como:' + xhr.responseText);
+            };
+            // idtoken es el objeto que mandaremos almacenando lo que tiene id_token, recogeremos esto con req.body, el = nose para que sirve, es como para asignar el valor de id_token a idtoken
+            xhr.send('idtoken=' + id_token);//mandamos información a mi backend server, a mi ruta /google, esa inforamcion la recogemos con req.body.idtoken
+        }
+    </script>
+</body>
+
+</html>
