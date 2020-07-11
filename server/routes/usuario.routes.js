@@ -7,9 +7,6 @@ const _ = require('underscore');
 //requirimos mi middleware
 const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
-app.get('/', (req,res) => {
-    res.send('Welcome to my first restServer');
-})
 
 /**
  * Consultamos todos los registros que esten activos, que su propiedad 'estado' este a true
@@ -157,7 +154,7 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], (req ,res) => {
 });
 
 /* Borrado fisico*/
-app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role   ], (req ,res) => {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], (req ,res) => {
     let id = req.params.id;
     Usuario.findByIdAndRemove(id, ( err, usuarioBorrado) => {
         if(err){
