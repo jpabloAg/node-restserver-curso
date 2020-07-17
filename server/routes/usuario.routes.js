@@ -123,7 +123,7 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], (req, res) =>{
 
     usuario.save( (err, usuarioDB) => {
         if(err){
-            return res.status(400).json({
+            return res.status(500).json({
                 ok:false,//ok:false significa que no se hizo la peticion correctamente, es lo que significa 400
                 err
             });
