@@ -12,6 +12,11 @@
 </head>
 
 <body>
+    <!-- Estamos haciendo una peticion a mi propio servidor, a la ruta
+    /imagen/:tipo/:img esta ruta requiere de un token para funcionar, porlo que
+    si no se le da no mostrara ninguna imagen -->
+    <img src="http://localhost:3000/imagen/usuarios/5ef179b2b272601efc71f275-212.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7InJvbGUiOiJBRE1JTl9ST0xFIiwiZXN0YWRvIjp0cnVlLCJnb29nbGUiOmZhbHNlLCJfaWQiOiI1ZWYxNzlkNGIyNzI2MDFlZmM3MWYyNzgiLCJub21icmUiOiJMaW5rIiwiZW1haWwiOiJ0ZXN0NEB1ZGVhLmVkdS5jbyIsIl9fdiI6MH0sImlhdCI6MTU5NTU3Mjg2MSwiZXhwIjoxNTk1NzQ1NjYxfQ.ZulcndjPDjPiOHD2CDCHDRB6qhH1FnW3DAL03m-vpKU" alt="">
+
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <a href="#" onclick="signOut();">Sign out</a>
     <script>

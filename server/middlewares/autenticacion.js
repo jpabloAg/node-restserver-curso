@@ -43,7 +43,31 @@ let verificaAdmin_Role = (req, res, next) => {
     }
 }
 
+// ===========================
+// Verifica token para imagen
+// usaremos este middleware para verificar un token que nos llegara por la url, mas 
+// no en la peticion como si lo recibe el middleware verificaToken, ese token me llegara
+// como un parametro opcional, por eso uso req.query
+// ===========================
+let verificaTokenImg = (req, res, next) => {
+    let token = req.query.token;
+    
+    jwt.verify(token, process.env.SEED, (err, encoded) => {
+        if(err){
+            return res.status(401).json({
+                ok:false,
+                error: {
+                    message: 'no se proporciono ningun token o el token suministrado es incorrecto, acceso denegado'
+                }
+            });
+        }
+
+        next();
+    });
+}
+
 module.exports = {
     verificaToken,
-    verificaAdmin_Role
+    verificaAdmin_Role,
+    verificaTokenImg
 }

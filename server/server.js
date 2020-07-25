@@ -4,8 +4,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+const fileUpload = require('express-fileupload');
 
 // Middlewares
+
+/**
+ * Middlewares para el modulo express-fileupload:
+ * cuando llamamos a esta funcion todos los archivos que se cargen se almacenaran en req.files
+ */
+app.use(fileUpload());
 
 // parse application/x-www/form-urlencoded
 app.use(bodyParser.urlencoded({ extended:false }));
